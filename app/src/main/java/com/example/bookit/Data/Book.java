@@ -8,7 +8,7 @@ public class Book {
     private int currPage;
     private int totalPage;
     private String img;
-    private LocalDate dayStarted;
+//    private LocalDate dayStarted;
     private boolean completed;
 
     public Book(String title, String author, int currPage, int totalPage, String img) {
