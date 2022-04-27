@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.bookit.Data.Book;
+import com.example.bookit.Data.DBHelper;
 import com.example.bookit.Data.Data;
 
 import java.util.ArrayList;
@@ -58,7 +59,12 @@ public class AddNew extends AppCompatActivity {
         int page = Integer.parseInt(curP);
         String image = url.getText().toString();
         Book b = new Book(tit, aut,page,250, image);
+
+        DBHelper dbHelper = new DBHelper(AddNew.this);
+        dbHelper.addOne(b);
+
         books.add(b);
+
         returnBut(v);
     }
 
