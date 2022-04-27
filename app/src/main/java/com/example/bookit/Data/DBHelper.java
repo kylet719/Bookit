@@ -4,10 +4,13 @@ import static java.sql.Types.NULL;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -49,5 +52,35 @@ public class DBHelper extends SQLiteOpenHelper {
         } else {
             return false;
         }
+    }
+
+    public ArrayList<Book> getBooks() {
+        ArrayList<Book> returnList = new ArrayList<>();
+
+        String query = "SELECT * FROM " + BOOK_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String bookTitle = cursor.getString(0);
+                String bookAuthor = cursor.getString(1);
+                String bookCover = cursor.getString(2);
+
+                Book book = new Book(bookTitle,bookAuthor,1,250,bookCover);
+                returnList.add(book);
+
+            } while(cursor.moveToNext());
+
+        } else {
+            //FAIL
+
+        }
+
+
+
+
+        return returnList;
     }
 }
