@@ -8,6 +8,7 @@ public class Book {
     private int currPage;
     private int totalPage;
     private String img;
+    private String blurb;
 //    private LocalDate dayStarted;
     private boolean completed;
 
@@ -18,6 +19,10 @@ public class Book {
         this.img = img;
         this.completed = false;
         this.totalPage = totalPage;
+    }
+
+    public void setBlurb(String s) {
+        this.blurb = s;
     }
 
     public void setCurrPage(int i) throws Exception {

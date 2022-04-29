@@ -1,13 +1,20 @@
 package com.example.bookit.ui;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,11 +35,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class ReadingFragment extends Fragment {
+public class ReadingFragment extends Fragment implements bookAdapter.NoteListener {
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private View root;
+
+    //Edit book popup
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private TextView titleName;
+    private EditText pageEdit;
+    private EditText descEdit;
+    private Button update;
+    private Button cancel;
 
     private DBHelper database;
     private ArrayList<Book> bookList;
@@ -44,8 +60,9 @@ public class ReadingFragment extends Fragment {
     }
 
     public void refresh() {
-        mAdapter = new bookAdapter(this.getContext());
+        mAdapter = new bookAdapter(this.getContext(), this);
         recyclerView.setAdapter(mAdapter);
+        bookList = database.getBooks();
 
         new ItemTouchHelper(itemTouchHelp).attachToRecyclerView(recyclerView);
     }
@@ -59,9 +76,6 @@ public class ReadingFragment extends Fragment {
         recyclerView = root.findViewById(R.id.rv_Books);
         recyclerView.setHasFixedSize(true);recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         refresh();
-
-
-
 
         return root;
     }
@@ -95,6 +109,45 @@ public class ReadingFragment extends Fragment {
         binding = null;
     }
 
+    public void createContactDialog(String title, int currentPage, String author, String image) {
+        dialogBuilder = new AlertDialog.Builder(this.getContext());
+        final View contactPopup = getLayoutInflater().inflate(R.layout.current_book_popup, null);
+
+        titleName = contactPopup.findViewById(R.id.popTitle);
+        titleName.setText(title);
+        pageEdit = contactPopup.findViewById(R.id.popupEditPage);
+        pageEdit.setText(String.valueOf(currentPage));
+
+        descEdit = contactPopup.findViewById(R.id.popupEditDescrip);
+
+        cancel = contactPopup.findViewById(R.id.popupCancelBut);
+        update = contactPopup.findViewById(R.id.popSaveBut);
+
+        dialogBuilder.setView(contactPopup);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer newPage = Integer.parseInt(pageEdit.getText().toString());
+                database.updateOne(title, newPage, author, image, currentPage);
+                refresh();
+                dialog.dismiss();
+
+            }
+        });
+
+
+    }
+
     ItemTouchHelper.SimpleCallback itemTouchHelp = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -106,14 +159,12 @@ public class ReadingFragment extends Fragment {
             Book b = bookList.get(viewHolder.getAdapterPosition());
             database.removeOne(b);
             refresh();
-//            database.removeOne(bookList.get(viewHolder.getAdapterPosition()));
-//            mAdapter.notifyDataSetChanged();
-//            viewHolder.getAdapterPosition()
-//            database.
-//            mAdapter.getDB()
-//            mAdapter
-//            mAdapter.notifyDataSetChanged();
-
         }
     };
+
+    @Override
+    public void onClick(int position) {
+        Book b = bookList.get(position);
+        createContactDialog(b.getTitle(), b.getPage(), b.getAuthor(), b.getImg());
+    }
 }

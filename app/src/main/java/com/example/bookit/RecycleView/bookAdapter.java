@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,11 +25,14 @@ public class bookAdapter extends RecyclerView.Adapter<bookAdapter.myViewHolder> 
     DBHelper d;
     Context context;
 
+    private NoteListener mNoteListener;
 
-    public bookAdapter(Context context) {
+
+    public bookAdapter(Context context, NoteListener noteListener) {
 //        Data d = new Data();
         this.d = new DBHelper(context);
         this.books = d.getBooks();
+        this.mNoteListener = noteListener;
         this.context = context;
     }
 
@@ -36,7 +40,7 @@ public class bookAdapter extends RecyclerView.Adapter<bookAdapter.myViewHolder> 
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.oneview,parent,false);
-        myViewHolder holder = new myViewHolder(view);
+        myViewHolder holder = new myViewHolder(view, mNoteListener);
         return holder;
     }
 
@@ -66,18 +70,37 @@ public class bookAdapter extends RecyclerView.Adapter<bookAdapter.myViewHolder> 
         return books.size();
     }
 
-    public class myViewHolder extends RecyclerView.ViewHolder {
+    public class myViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView cover;
         TextView author;
         TextView title;
         TextView currentPage;
 
-        public myViewHolder(@NonNull View itemView) {
+        NoteListener noteListen;
+
+        public myViewHolder(@NonNull View itemView, NoteListener noteListen) {
             super(itemView);
             cover = itemView.findViewById(R.id.iV_cover);
             author = itemView.findViewById((R.id.tv_Author));
             title = itemView.findViewById(R.id.tv_Book);
             currentPage = itemView.findViewById(R.id.tv_PageTeller);
+
+
+            this.noteListen = noteListen;
+            itemView.setOnClickListener(this);
+
+
+
         }
+
+        @Override
+        public void onClick(View view) {
+            noteListen.onClick(getAdapterPosition());
+
+        }
+    }
+
+    public interface NoteListener {
+        void onClick(int position);
     }
 }

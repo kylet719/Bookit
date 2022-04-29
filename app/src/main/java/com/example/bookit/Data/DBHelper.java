@@ -23,10 +23,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final int VERSION = 2;
 
-
-
-
-
     public DBHelper(@Nullable Context context) {
         super(context, "books.db", null, VERSION);
     }
@@ -61,8 +57,8 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(BOOK_COVER, b.getImg());
         cv.put(BOOK_CURRENT, b.getPage());
 
-        long success = db.insert(BOOK_TABLE, null,cv);
-        if (success != -1 ) {
+        long success = db.insert(BOOK_TABLE, null, cv);
+        if (success != -1) {
             return true;
         } else {
             return false;
@@ -71,13 +67,25 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean removeOne(Book b) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(BOOK_TABLE, BOOK_NAME + "=?", new String[]{b.getTitle()}) > 0;
-//        String query = "DELETE FROM " + BOOK_TABLE + " WHERE " + BOOK_NAME + " LIKE " + b.getTitle();
-//
-//        Cursor cursor = db.rawQuery(query,null);
-//
-//        if (cursor.moveToFirst()) return true;
-//        else return false;
+        boolean rett = db.delete(BOOK_TABLE, BOOK_NAME + "=?", new String[]{b.getTitle()}) > 0;
+        db.close();
+        return rett;
+    }
+
+    public boolean updateOne(String title, int up, String auth, String img, int old) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(BOOK_NAME, title);
+        cv.put(BOOK_AUTHOR, auth);
+        cv.put(BOOK_COVER, img);
+        cv.put(BOOK_CURRENT, up);
+
+        db.update(BOOK_TABLE, cv, BOOK_NAME+ "=?", new String[] {title});
+        db.close();
+        return true;
+
+
     }
 
     public ArrayList<Book> getBooks() {
@@ -95,10 +103,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 String bookCover = cursor.getString(2);
                 int page = cursor.getInt(3);
 
-                Book book = new Book(bookTitle,bookAuthor,page,250,bookCover);
+                Book book = new Book(bookTitle, bookAuthor, page, 250, bookCover);
                 returnList.add(book);
 
-            } while(cursor.moveToNext());
+            } while (cursor.moveToNext());
 
         } else {
             //FAIL
