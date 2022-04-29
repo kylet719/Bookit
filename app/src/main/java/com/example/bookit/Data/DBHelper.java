@@ -27,8 +27,6 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createTable = "CREATE TABLE " + BOOK_TABLE + " (" + BOOK_NAME + " TEXT, " + BOOK_AUTHOR + " TEXT, " + BOOK_COVER + " TEXT)";
-
-
         sqLiteDatabase.execSQL(createTable);
 
     }
@@ -54,6 +52,17 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean removeOne(Book b) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(BOOK_TABLE, BOOK_NAME + "=?", new String[]{b.getTitle()}) > 0;
+//        String query = "DELETE FROM " + BOOK_TABLE + " WHERE " + BOOK_NAME + " LIKE " + b.getTitle();
+//
+//        Cursor cursor = db.rawQuery(query,null);
+//
+//        if (cursor.moveToFirst()) return true;
+//        else return false;
+    }
+
     public ArrayList<Book> getBooks() {
         ArrayList<Book> returnList = new ArrayList<>();
 
@@ -77,10 +86,8 @@ public class DBHelper extends SQLiteOpenHelper {
             //FAIL
 
         }
-
-
-
-
+        cursor.close();
+        db.close();
         return returnList;
     }
 }

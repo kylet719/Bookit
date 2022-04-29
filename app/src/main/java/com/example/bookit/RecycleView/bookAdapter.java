@@ -21,12 +21,13 @@ import java.util.ArrayList;
 
 public class bookAdapter extends RecyclerView.Adapter<bookAdapter.myViewHolder> {
     ArrayList<Book> books;
+    DBHelper d;
     Context context;
 
 
     public bookAdapter(Context context) {
 //        Data d = new Data();
-        DBHelper d = new DBHelper(context);
+        this.d = new DBHelper(context);
         this.books = d.getBooks();
         this.context = context;
     }

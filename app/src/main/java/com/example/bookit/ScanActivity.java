@@ -40,6 +40,7 @@ public class ScanActivity extends AppCompatActivity {
             i.putExtra("data",bookDetails);
             startActivity(i);
         }));
+
         scannerView.setOnClickListener(view -> mCodeScanner.startPreview());
     }
 
