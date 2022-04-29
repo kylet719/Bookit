@@ -19,20 +19,36 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String BOOK_NAME = "BOOK_NAME";
     public static final String BOOK_AUTHOR = "BOOK_AUTHOR";
     public static final String BOOK_COVER = "BOOK_COVER";
+    public static final String BOOK_CURRENT = "BOOK_CURRENT";
+
+    public static final int VERSION = 2;
+
+
+
+
 
     public DBHelper(@Nullable Context context) {
-        super(context, "books.db", null, 1);
+        super(context, "books.db", null, VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTable = "CREATE TABLE " + BOOK_TABLE + " (" + BOOK_NAME + " TEXT, " + BOOK_AUTHOR + " TEXT, " + BOOK_COVER + " TEXT)";
+        String createTable = "CREATE TABLE " + BOOK_TABLE + " (" + BOOK_NAME + " TEXT, " + BOOK_AUTHOR + " TEXT, " + BOOK_COVER + " TEXT, " + BOOK_CURRENT + " INTEGER)";
         sqLiteDatabase.execSQL(createTable);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        if (i < 1) {
+            String createTable = "CREATE TABLE " + BOOK_TABLE + " (" + BOOK_NAME + " TEXT, " + BOOK_AUTHOR + " TEXT, " + BOOK_COVER + " TEXT, " + BOOK_CURRENT + " INTEGER)";
+            sqLiteDatabase.execSQL(createTable);
+        }
+
+        if (i < 2) {
+            String update = "ALTER TABLE " + BOOK_TABLE + "  ADD COLUMN  " + BOOK_CURRENT + " INTEGER";
+            sqLiteDatabase.execSQL(update);
+        }
 
     }
 
@@ -43,6 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(BOOK_NAME, b.getTitle());
         cv.put(BOOK_AUTHOR, b.getAuthor());
         cv.put(BOOK_COVER, b.getImg());
+        cv.put(BOOK_CURRENT, b.getPage());
 
         long success = db.insert(BOOK_TABLE, null,cv);
         if (success != -1 ) {
@@ -76,8 +93,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 String bookTitle = cursor.getString(0);
                 String bookAuthor = cursor.getString(1);
                 String bookCover = cursor.getString(2);
+                int page = cursor.getInt(3);
 
-                Book book = new Book(bookTitle,bookAuthor,1,250,bookCover);
+                Book book = new Book(bookTitle,bookAuthor,page,250,bookCover);
                 returnList.add(book);
 
             } while(cursor.moveToNext());
