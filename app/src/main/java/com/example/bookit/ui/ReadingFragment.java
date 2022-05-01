@@ -59,27 +59,14 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
         super.onCreate(savedInstanceState);
     }
 
-    /**
-     * Refreshes the items in the recyclerview after an add or removal has happened
-     */
-    public void refresh() {
-        mAdapter = new bookAdapter(this.getContext(), this);
-        recyclerView.setAdapter(mAdapter);
-        bookList = database.getBooks();
-
-        new ItemTouchHelper(itemTouchHelp).attachToRecyclerView(recyclerView);
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         database = new DBHelper(this.getContext());
         bookList = database.getBooks();
-
         recyclerView = root.findViewById(R.id.rv_Books);
         recyclerView.setHasFixedSize(true);recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         refresh();
-
         return root;
     }
 
@@ -92,7 +79,6 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.onGoing_Add) {
             Intent i = new Intent(this.getActivity(), AddNew.class);
             startActivity(i);
@@ -100,11 +86,8 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
         } else if (id == R.id.onGoing_sort) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
-
 
     @Override
     public void onDestroyView() {
@@ -112,6 +95,33 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
         binding = null;
     }
 
+    /**
+     * Refreshes the items in the recyclerview after an add or removal has happened
+     */
+    public void refresh() {
+        mAdapter = new bookAdapter(this.getContext(), this);
+        recyclerView.setAdapter(mAdapter);
+        bookList = database.getBooks();
+        new ItemTouchHelper(itemTouchHelp).attachToRecyclerView(recyclerView);
+    }
+
+    /**
+     * ViewHolder OnClick Listener. Should trigger the Edit book pop-up window
+     * @param position - Position of book in list passed in from touch feedback
+     */
+    @Override
+    public void onClick(int position) {
+        Book b = bookList.get(position);
+        createContactDialog(b.getTitle(), b.getPage(), b.getAuthor(), b.getImg());
+    }
+
+    /**
+     * Creates the pop-up window when clicking on existing book. Allows for current page update
+     * @param title Book info passed in from RecyclerView object
+     * @param currentPage Current page passed in from RecyclerView object
+     * @param author Author passed in from RecyclerView object
+     * @param image Image URL passed in from RecyclerView object
+     */
     public void createContactDialog(String title, int currentPage, String author, String image) {
         dialogBuilder = new AlertDialog.Builder(this.getContext());
         final View contactPopup = getLayoutInflater().inflate(R.layout.current_book_popup, null);
@@ -155,6 +165,9 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
 
     }
 
+    /**
+     * Touch helper for ViewHolder to enable swipe to delete
+     */
     ItemTouchHelper.SimpleCallback itemTouchHelp = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -169,9 +182,5 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
         }
     };
 
-    @Override
-    public void onClick(int position) {
-        Book b = bookList.get(position);
-        createContactDialog(b.getTitle(), b.getPage(), b.getAuthor(), b.getImg());
-    }
+
 }
