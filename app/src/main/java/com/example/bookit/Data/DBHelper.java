@@ -13,14 +13,14 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
-
-
+    //SQLite Columns
     public static final String BOOK_TABLE = "BOOK_TABLE";
     public static final String BOOK_NAME = "BOOK_NAME";
     public static final String BOOK_AUTHOR = "BOOK_AUTHOR";
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String BOOK_CURRENT = "BOOK_CURRENT";
 
+    //Current version
     public static final int VERSION = 2;
 
     public DBHelper(@Nullable Context context) {
@@ -31,7 +31,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createTable = "CREATE TABLE " + BOOK_TABLE + " (" + BOOK_NAME + " TEXT, " + BOOK_AUTHOR + " TEXT, " + BOOK_COVER + " TEXT, " + BOOK_CURRENT + " INTEGER)";
         sqLiteDatabase.execSQL(createTable);
-
     }
 
     @Override
@@ -40,14 +39,17 @@ public class DBHelper extends SQLiteOpenHelper {
             String createTable = "CREATE TABLE " + BOOK_TABLE + " (" + BOOK_NAME + " TEXT, " + BOOK_AUTHOR + " TEXT, " + BOOK_COVER + " TEXT, " + BOOK_CURRENT + " INTEGER)";
             sqLiteDatabase.execSQL(createTable);
         }
-
         if (i < 2) {
             String update = "ALTER TABLE " + BOOK_TABLE + "  ADD COLUMN  " + BOOK_CURRENT + " INTEGER";
             sqLiteDatabase.execSQL(update);
         }
-
     }
 
+    /**
+     * Adds a book to the SQLite database. Requires name, author, and cover
+     * @param b - Book instance to add into SQLite database
+     * @return - Returns true if add was successful, false otherwise.
+     */
     public boolean addOne(Book b) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
@@ -65,6 +67,13 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+
+    /**
+     * Deletes an existing book with the same name from the database. Does nothing if book does not
+     * exist
+     * @param b - Book instance to be removed from the SQLite database
+     * @return - Returns true if delete was successful. False if not or if book is not in database
+     */
     public boolean removeOne(Book b) {
         SQLiteDatabase db = this.getWritableDatabase();
         boolean rett = db.delete(BOOK_TABLE, BOOK_NAME + "=?", new String[]{b.getTitle()}) > 0;
@@ -90,12 +99,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public ArrayList<Book> getBooks() {
         ArrayList<Book> returnList = new ArrayList<>();
-
         String query = "SELECT * FROM " + BOOK_TABLE;
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor cursor = db.rawQuery(query, null);
-
         if (cursor.moveToFirst()) {
             do {
                 String bookTitle = cursor.getString(0);

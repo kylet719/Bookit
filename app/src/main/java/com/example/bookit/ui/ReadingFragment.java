@@ -41,7 +41,7 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
     private RecyclerView.Adapter mAdapter;
     private View root;
 
-    //Edit book popup
+    //Fields for the PopUp window
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private TextView titleName;
@@ -59,6 +59,9 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Refreshes the items in the recyclerview after an add or removal has happened
+     */
     public void refresh() {
         mAdapter = new bookAdapter(this.getContext(), this);
         recyclerView.setAdapter(mAdapter);
@@ -115,6 +118,10 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
 
         titleName = contactPopup.findViewById(R.id.popTitle);
         titleName.setText(title);
+        if (title.length() > 20) {
+            titleName.setTextSize(15);
+        }
+
         pageEdit = contactPopup.findViewById(R.id.popupEditPage);
         pageEdit.setText(String.valueOf(currentPage));
 

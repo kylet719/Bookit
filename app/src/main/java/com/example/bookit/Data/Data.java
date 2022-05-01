@@ -4,6 +4,7 @@ import android.app.Application;
 
 import java.util.ArrayList;
 
+//NOTE: OBSELETE
 public class Data extends Application {
     private static ArrayList<Book> onGoingBooks = new ArrayList<>();
     private static ArrayList<Book> completedBooks = new ArrayList<>();

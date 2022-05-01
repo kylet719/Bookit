@@ -9,9 +9,17 @@ public class Book {
     private int totalPage;
     private String img;
     private String blurb;
-//    private LocalDate dayStarted;
     private boolean completed;
+    //    private LocalDate dayStarted;
 
+    /**
+     * Default constructor for a book object
+     * @param title - Book title
+     * @param author - Author of book
+     * @param currPage - Current page user is on
+     * @param totalPage - Total pages in book
+     * @param img - URL of a PNG or JPG of book cover
+     */
     public Book(String title, String author, int currPage, int totalPage, String img) {
         this.title = title;
         this.author = author;
@@ -31,26 +39,22 @@ public class Book {
         completed = currPage == totalPage;
     }
 
+    //getters
     public String getTitle() {
         return title;
     }
-
     public String getAuthor() {
         return author;
     }
-
     public int getPage() {
         return currPage;
     }
-
     public String getImg() {
         return img;
     }
-
     public boolean getCompleted() {
         return completed;
     }
-
     public int getPercentage() {
         return (int)((currPage * 100.0f) / totalPage);
     }

@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
@@ -20,6 +20,7 @@ public class ScanActivity extends AppCompatActivity {
     private CodeScanner mCodeScanner;
     private final String urlSite = "https://www.bookfinder.com/search/?author=&title=&lang=en&isbn=";
     private final String urlSite2 = "&new_used=*&destination=ca&currency=CAD&mode=basic&st=sr&ac=qr";
+    private String[] scannedBookData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,24 +28,41 @@ public class ScanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scan);
         CodeScannerView scannerView = findViewById(R.id.scanneview);
         mCodeScanner = new CodeScanner(this, scannerView);
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-        StrictMode.setThreadPolicy(policy);
-
         mCodeScanner.setDecodeCallback(result -> this.runOnUiThread(() -> {
             TextView holder = findViewById(R.id.scanResults);
             String ibsn = result.getText();
-            String[] bookDetails = getInfo(ibsn);
+
+            // New thread for network request
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getInfo(ibsn);
+                }
+            });
+            thread.start();
+            try {
+                Toast.makeText(this, "Pulling Book Info", Toast.LENGTH_SHORT).show();
+                thread.join();
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             Intent i = new Intent(this, AddNew.class);
-            i.putExtra("data",bookDetails);
+            i.putExtra("data", scannedBookData);
             startActivity(i);
         }));
 
         scannerView.setOnClickListener(view -> mCodeScanner.startPreview());
     }
 
-    private String[] getInfo(String i) {
+    /**
+     * Method for new thread to conduct JSoup API call and scrape for book info
+     *
+     * @param i - the ISBN book number scanned by Scanner
+     * @return - nothing
+     */
+    private void getInfo(String i) {
         String[] data = {"title", "author", "url"};
         String bookPage = urlSite + i + urlSite2;
 
@@ -65,8 +83,6 @@ public class ScanActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return data;
+        scannedBookData = data;
     }
-
-
 }
