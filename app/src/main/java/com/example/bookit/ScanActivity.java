@@ -41,7 +41,7 @@ public class ScanActivity extends AppCompatActivity {
             });
             thread.start();
             try {
-                Toast.makeText(this, "Pulling Book Info", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "LOADING", Toast.LENGTH_SHORT).show();
                 thread.join();
 
             } catch (InterruptedException e) {

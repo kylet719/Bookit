@@ -34,6 +34,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="137dp"
-        android:text="Scan something..." />
+        android:text="Scan something..."
+        android:visibility="invisible" />
 
 </RelativeLayout>
