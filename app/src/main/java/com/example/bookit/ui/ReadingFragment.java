@@ -1,11 +1,8 @@
 package com.example.bookit.ui;
 
-import static androidx.fragment.app.FragmentManager.TAG;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +25,6 @@ import com.example.bookit.Data.Book;
 import com.example.bookit.Data.DBHelper;
 import com.example.bookit.R;
 import com.example.bookit.RecycleView.bookAdapter;
-import com.example.bookit.RecycleView.bookCompletedAdapter;
 import com.example.bookit.databinding.FragmentHomeBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -63,7 +59,7 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         database = new DBHelper(this.getContext());
-        bookList = database.getBooks();
+        bookList = database.getOnGoingBooks();
         recyclerView = root.findViewById(R.id.rv_Books);
         recyclerView.setHasFixedSize(true);recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         refresh();
@@ -101,8 +97,10 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
     public void refresh() {
         mAdapter = new bookAdapter(this.getContext(), this);
         recyclerView.setAdapter(mAdapter);
-        bookList = database.getBooks();
-        new ItemTouchHelper(itemTouchHelp).attachToRecyclerView(recyclerView);
+        bookList = database.getOnGoingBooks();
+        new ItemTouchHelper(swipeToDeleteLeft).attachToRecyclerView(recyclerView);
+        new ItemTouchHelper(swipeToComplete).attachToRecyclerView(recyclerView);
+
     }
 
     /**
@@ -155,7 +153,8 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
             @Override
             public void onClick(View view) {
                 Integer newPage = Integer.parseInt(pageEdit.getText().toString());
-                database.updateOne(title, newPage, author, image, currentPage);
+                Book update = new Book(title,author,newPage,250,image);
+                database.updateOne(update);
                 refresh();
                 dialog.dismiss();
 
@@ -168,7 +167,7 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
     /**
      * Touch helper for ViewHolder to enable swipe to delete
      */
-    ItemTouchHelper.SimpleCallback itemTouchHelp = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
+    ItemTouchHelper.SimpleCallback swipeToDeleteLeft = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -178,6 +177,21 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             Book b = bookList.get(viewHolder.getAdapterPosition());
             database.removeOne(b);
+            refresh();
+        }
+    };
+
+    ItemTouchHelper.SimpleCallback swipeToComplete = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            Book b = bookList.get(viewHolder.getAdapterPosition());
+            b.setCompleted(true);
+            database.updateOne(b);
             refresh();
         }
     };

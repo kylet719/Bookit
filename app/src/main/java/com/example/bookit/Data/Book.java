@@ -9,6 +9,7 @@ public class Book {
     private int totalPage;
     private String img;
     private String blurb;
+    private String date;
     private boolean completed;
     //    private LocalDate dayStarted;
 
@@ -27,17 +28,21 @@ public class Book {
         this.img = img;
         this.completed = false;
         this.totalPage = totalPage;
+        this.date = "";
     }
 
     public void setBlurb(String s) {
         this.blurb = s;
     }
 
-    public void setCurrPage(int i) throws Exception {
-        if (i > totalPage) throw new Exception();
+    public void setCurrPage(int i)  {
         this.currPage = i;
-        completed = currPage == totalPage;
     }
+
+    public void setCompleted(boolean v) {
+        this.completed = v;
+    }
+
 
     //getters
     public String getTitle() {
@@ -57,5 +62,8 @@ public class Book {
     }
     public int getPercentage() {
         return (int)((currPage * 100.0f) / totalPage);
+    }
+    public String getDate() {
+        return date;
     }
 }

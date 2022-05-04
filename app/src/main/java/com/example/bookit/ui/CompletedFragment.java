@@ -12,15 +12,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookit.AddNew;
+import com.example.bookit.Data.Book;
+import com.example.bookit.Data.DBHelper;
 import com.example.bookit.R;
+import com.example.bookit.RecycleView.bookAdapter;
 import com.example.bookit.RecycleView.bookCompletedAdapter;
 import com.example.bookit.databinding.FragmentDashboardBinding;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 public class CompletedFragment extends Fragment {
 
@@ -28,6 +34,9 @@ public class CompletedFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private View root;
+
+    private ArrayList<Book> completedBooks;
+    private DBHelper database;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,10 +48,18 @@ public class CompletedFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         recyclerView = root.findViewById(R.id.rv_Completed);
+        database = new DBHelper(this.getContext());
         recyclerView.setHasFixedSize(true);recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        refresh();
+        return root;
+    }
+
+    public void refresh() {
         mAdapter = new bookCompletedAdapter(this.getContext());
         recyclerView.setAdapter(mAdapter);
-        return root;
+        completedBooks = database.getCompletedBooks();
+        new ItemTouchHelper(swipeBackToReading).attachToRecyclerView(recyclerView);
+
     }
 
     @Override
@@ -71,4 +88,20 @@ public class CompletedFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    ItemTouchHelper.SimpleCallback swipeBackToReading = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            Book b = completedBooks.get(viewHolder.getAdapterPosition());
+            b.setCompleted(false);
+            b.setCurrPage(1);
+            database.updateOne(b);
+            refresh();
+        }
+    };
 }

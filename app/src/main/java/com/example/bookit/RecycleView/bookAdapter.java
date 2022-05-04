@@ -8,15 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookit.Data.Book;
 import com.example.bookit.Data.DBHelper;
-import com.example.bookit.Data.Data;
 import com.example.bookit.R;
-import com.example.bookit.ui.ReadingFragment;
 
 import java.util.ArrayList;
 
@@ -31,7 +28,7 @@ public class bookAdapter extends RecyclerView.Adapter<bookAdapter.myViewHolder> 
     public bookAdapter(Context context, NoteListener noteListener) {
 //        Data d = new Data();
         this.d = new DBHelper(context);
-        this.books = d.getBooks();
+        this.books = d.getOnGoingBooks();
         this.mNoteListener = noteListener;
         this.context = context;
     }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookit.Data.Book;
+import com.example.bookit.Data.DBHelper;
 import com.example.bookit.Data.Data;
 import com.example.bookit.R;
 
@@ -19,11 +20,13 @@ import java.util.ArrayList;
 
 public class bookCompletedAdapter extends RecyclerView.Adapter<bookCompletedAdapter.myViewHolder> {
     ArrayList<Book> books;
+    DBHelper d;
     Context context;
 
 
     public bookCompletedAdapter(Context context) {
-        Data d = new Data();
+        this.d = new DBHelper(context);
+        this.books = d.getCompletedBooks();
         this.books = d.getCompletedBooks();
         this.context = context;
     }
