@@ -27,7 +27,6 @@ public class bookCompletedAdapter extends RecyclerView.Adapter<bookCompletedAdap
     public bookCompletedAdapter(Context context) {
         this.d = new DBHelper(context);
         this.books = d.getCompletedBooks();
-        this.books = d.getCompletedBooks();
         this.context = context;
     }
 
@@ -41,9 +40,7 @@ public class bookCompletedAdapter extends RecyclerView.Adapter<bookCompletedAdap
 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
-        holder.author.setText("By: " + books.get(position).getAuthor());
         holder.title.setText(books.get(position).getTitle());
-        holder.dateComp.setText("p"+ String.valueOf(books.get(position).getPage()));
         Glide.with(context).load(books.get(position).getImg()).into(holder.cover);
 
     }
@@ -56,16 +53,12 @@ public class bookCompletedAdapter extends RecyclerView.Adapter<bookCompletedAdap
 
     public class myViewHolder extends RecyclerView.ViewHolder {
         ImageView cover;
-        TextView author;
         TextView title;
-        TextView dateComp;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
             cover = itemView.findViewById(R.id.iv_CoverCompleted);
-            author = itemView.findViewById((R.id.tv_AuthorComplete));
             title = itemView.findViewById(R.id.tv_TitleCompleted);
-            dateComp = itemView.findViewById(R.id.tv_DateCompleted);
         }
     }
 }

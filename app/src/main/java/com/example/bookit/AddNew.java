@@ -59,6 +59,9 @@ public class AddNew extends AppCompatActivity {
         String curP = curPage.getText().toString();
         int page = Integer.parseInt(curP);
         String image = url.getText().toString();
+        if (image.length()==0) {
+            image = "https://readersend.com/wp-content/uploads/2018/04/book-sample_preview-1.png";
+        }
         Book b = new Book(tit, aut,page,250, image);
 
         DBHelper dbHelper = new DBHelper(AddNew.this);
