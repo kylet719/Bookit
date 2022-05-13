@@ -59,8 +59,8 @@ public class ScanActivity extends AppCompatActivity {
     /**
      * Method for new thread to conduct JSoup API call and scrape for book info
      *
-     * @param i - the ISBN book number scanned by Scanner
-     * @return - nothing
+     * @param i the ISBN book number scanned by Scanner
+     * @return nothing
      */
     private void getInfo(String i) {
         String[] data = {"title", "author", "url"};
