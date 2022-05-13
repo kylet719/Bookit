@@ -39,6 +39,7 @@
         android:layout_marginStart="69dp"
         android:onClick="returnBut"
         android:text="Return"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.073"
         app:layout_constraintStart_toEndOf="@+id/but_Add"
@@ -60,25 +61,25 @@
         android:id="@+id/edit_curPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="28dp"
         android:ems="10"
+        android:hint="Current page"
         android:inputType="number"
-        android:text="1"
-        app:layout_constraintStart_toEndOf="@+id/tv_curPage"
-        app:layout_constraintTop_toBottomOf="@+id/edit_Author" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_Author"
+        tools:layout_editor_absoluteX="100dp" />
 
     <Button
         android:id="@+id/but_Add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
+        android:layout_marginStart="64dp"
         android:onClick="addBook"
         android:text="Add Book"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_curPage"
-        app:layout_constraintVertical_bias="0.141" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_curPage"
+        app:layout_constraintVertical_bias="0.156" />
 
     <EditText
         android:id="@+id/edit_Author"
@@ -92,18 +93,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_Title" />
 
-    <TextView
-        android:id="@+id/tv_curPage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="32dp"
-        android:text="Current Page:"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_Author" />
-
     <Button
         android:id="@+id/but_goToScan"
         android:layout_width="wrap_content"
@@ -111,6 +100,7 @@
         android:layout_marginTop="32dp"
         android:onClick="launchScan"
         android:text="Scan"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"

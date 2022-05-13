@@ -49,15 +49,19 @@ public class AddNew extends AppCompatActivity {
     }
 
     public void returnBut(View v) {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
+        finish();
+//        Intent i = new Intent(this, MainActivity.class);
+//        startActivity(i);
     }
 
     public void addBook(View v) {
         String tit = title.getText().toString();
         String aut = author.getText().toString();
         String curP = curPage.getText().toString();
-        int page = Integer.parseInt(curP);
+        int page = 1;
+        if (curP.length() != 0) {
+            page = Integer.parseInt(curP);
+        }
         String image = url.getText().toString();
         if (image.length()==0) {
             image = "https://readersend.com/wp-content/uploads/2018/04/book-sample_preview-1.png";
