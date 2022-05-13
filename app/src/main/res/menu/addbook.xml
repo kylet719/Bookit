@@ -5,6 +5,7 @@
     <item
         android:id="@+id/onGoing_sort"
         android:icon="@mipmap/whiteplus"
+        android:visible="false"
         android:title=""
         app:showAsAction="always" />
 

@@ -100,12 +100,11 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
         bookList = database.getOnGoingBooks();
         new ItemTouchHelper(swipeToDeleteLeft).attachToRecyclerView(recyclerView);
         new ItemTouchHelper(swipeToComplete).attachToRecyclerView(recyclerView);
-
     }
 
     /**
      * ViewHolder OnClick Listener. Should trigger the Edit book pop-up window
-     * @param position - Position of book in list passed in from touch feedback
+     * @param position  Position of book in list passed in from touch feedback
      */
     @Override
     public void onClick(int position) {

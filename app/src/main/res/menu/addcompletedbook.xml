@@ -6,12 +6,14 @@
         android:id="@+id/completed_sort"
         android:icon="@mipmap/whiteplus"
         android:title=""
+        android:visible="false"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/completed_Add"
         android:icon="@mipmap/whiteadd"
         android:title=""
+        android:visible="false"
         app:showAsAction="always" />
 
 </menu>

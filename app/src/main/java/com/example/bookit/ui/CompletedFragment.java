@@ -17,14 +17,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookit.AddNew;
 import com.example.bookit.Data.Book;
 import com.example.bookit.Data.DBHelper;
 import com.example.bookit.R;
-import com.example.bookit.RecycleView.bookAdapter;
 import com.example.bookit.RecycleView.bookCompletedAdapter;
 import com.example.bookit.databinding.FragmentDashboardBinding;
 
@@ -54,7 +52,7 @@ public class CompletedFragment extends Fragment {
         recyclerView = root.findViewById(R.id.rv_Completed);
         database = new DBHelper(this.getContext());
         recyclerView.setHasFixedSize(true);recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
-        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(root.getContext(), R.dimen.cardview_default_radius);
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(root.getContext(), R.dimen.activity_horizontal_margin);
         recyclerView.addItemDecoration(itemDecoration);
         refresh();
         return root;
@@ -96,17 +94,13 @@ public class CompletedFragment extends Fragment {
     }
 
     public class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
-
         private int mItemOffset;
-
         public ItemOffsetDecoration(int itemOffset) {
             mItemOffset = itemOffset;
         }
-
         public ItemOffsetDecoration(@NonNull Context context, @DimenRes int itemOffsetId) {
             this(context.getResources().getDimensionPixelSize(itemOffsetId));
         }
-
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                    RecyclerView.State state) {
