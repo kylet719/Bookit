@@ -7,7 +7,7 @@ Tech Used:
  - Glide (display cover art)
  - SQLite (to locally store in progress/completed books)
  
-##Todos
+## Todos
 - Clean up the add book page
 - Add in sorting feature (including dates)
 - Add in summary page for completed books
