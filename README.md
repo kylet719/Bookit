@@ -11,11 +11,16 @@ Tech Used:
 - Glide (display cover art)
 - SQLite (to locally store in progress/completed books)
 
-## Todos
-- Clean up the add book page
-- Add in sorting feature (including dates)
-- Add in summary page for completed books
-- Make assortment of default covers for no image or add in search image functionality
+## Installation
+Uploading to Google play store currently in progress. Unfortunately, until then, to demo the app, you will have to download the package and run it through an emulator or physical device by enabling developer tools. A link has been provided to walk you through the steps
+
+- [Installation Guide](https://www.youtube.com/watch?v=InM2ATPunhE)
+
+Until then, take a look at the screenshots to get a sense of the functionality.
+
+## Features coming soon
+- Sorting feature
+- Dark mode
 
 ## Screenshots
 ![Display collection](https://i.imgur.com/tOhqD7v.jpg)

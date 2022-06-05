@@ -57,6 +57,7 @@ public class Book {
     public String getImg() {
         return img;
     }
+    public String getBlurb() {return blurb;}
     public boolean getCompleted() {
         return completed;
     }
