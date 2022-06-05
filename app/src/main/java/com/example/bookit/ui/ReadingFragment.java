@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bookit.AddNew;
 import com.example.bookit.Data.Book;
 import com.example.bookit.Data.DBHelper;
@@ -41,6 +43,7 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private TextView titleName;
+    private ImageView coverPic;
     private EditText pageEdit;
     private EditText descEdit;
     private Button update;
@@ -128,6 +131,9 @@ public class ReadingFragment extends Fragment implements bookAdapter.NoteListene
         if (title.length() > 20) {
             titleName.setTextSize(15);
         }
+
+        coverPic = contactPopup.findViewById(R.id.popup_cover);
+        Glide.with(getContext()).load(image).into(coverPic);
 
         pageEdit = contactPopup.findViewById(R.id.popupEditPage);
         pageEdit.setText(String.valueOf(currentPage));
