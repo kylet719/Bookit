@@ -9,7 +9,7 @@ Tech Used:
 - Android Code Scanner Library (to read barcodes)
 - JSoup (webscraper to get cover art for scanned books)
 - Glide (display cover art)
-- SQLite (to locally store in progress/completed books)
+- SQLite/SQL (to locally store in progress/completed books)
 
 ## Installation
 Uploading to Google play store currently in progress. Unfortunately, until then, to demo the app, you will have to download the package and run it through an emulator or physical device by enabling developer tools. A link has been provided to walk you through the steps
